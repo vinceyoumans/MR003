@@ -13,6 +13,7 @@ import (
 
 var w map[string]int
 var searchWords []string
+var jsonPages01 []string
 
 func main() {
 	const json02Path = "../../jsonout2/"
@@ -29,10 +30,18 @@ func main() {
 		fmt.Println(searchWords[i])
 	}
 
-	os.Exit(3)
+	// os.Exit(3)
 	//========================================
 
-	//doreadpages()
+	jsonPages01 = doreadpages()
+
+	for i := 0; i < len(jsonPages01); i++ {
+		fmt.Println("----- jsonPages01   ---" + jsonPages01[i])
+	}
+	//===========================================
+	// at this point...
+	//	SearchWords are populated
+	//  JsonPages to mine have been populated.
 
 	// fn := json02Path + "mr0176.json"
 	// fmt.Println(fn)
