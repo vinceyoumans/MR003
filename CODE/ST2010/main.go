@@ -158,8 +158,8 @@ func main() {
 	// tag words to be tracked
 
 	for i := 0; i < len(fww); i++ {
-		fww[i].Track1 = lookupword1(fww[i].Word)
-		fww[i].Track2 = lookupword2(fww[i].Word)
+		// fww[i].Track1 = lookupword1(fww[i].Word)
+		// fww[i].Track2 = lookupword2(fww[i].Word)
 	}
 
 	//==============================
@@ -223,14 +223,14 @@ func CreateSearchWords() []string {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("word: %s \n", record[0])
+		// fmt.Printf("word: %s \n", record[0])
 		sW = append(sW, record[0])
 	}
 	//  =======  print out searchwords to confirm its inflated
 
-	for i := 0; i < len(sW); i++ {
-		fmt.Println(sW[i])
-	}
+	// for i := 0; i < len(sW); i++ {
+	// 	fmt.Println(sW[i])
+	// }
 	return sW
 }
 
