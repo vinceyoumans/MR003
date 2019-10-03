@@ -22,30 +22,9 @@ func main() {
 	fmt.Println("==  beginning index of json=====")
 
 	w = make(map[string]int)
-	searchWords := CreateSearchWords()
+	searchWords := createSearchWords01()
 
-	// // Open the file
-	// csvfile, err := os.Open("./result2.csv")
-	// if err != nil {
-	// 	log.Fatalln("Couldn't open the csv file", err)
-	// }
-
-	// r := csv.NewReader(csvfile)
-	// //r := csv.NewReader(bufio.NewReader(csvfile))
-
-	// for {
-	// 	record, err := r.Read()
-	// 	if err == io.EOF {
-	// 		break
-	// 	}
-	// 	if err != nil {
-	// 		log.Fatal(err)
-	// 	}
-	// 	fmt.Printf("word: %s \n", record[0])
-	// 	searchWords = append(searchWords, record[0])
-	// }
-	// //  =======  print out searchwords to confirm its inflated
-
+	//  This is to confirm SearchWords has been populated properly
 	for i := 0; i < len(searchWords); i++ {
 		fmt.Println(searchWords[i])
 	}
@@ -204,7 +183,7 @@ func main() {
 
 //==================================================
 //==================================================
-func CreateSearchWords() []string {
+func createSearchWords01() []string {
 	var sW []string
 	// Open the file
 	csvfile, err := os.Open("./result2.csv")
@@ -226,11 +205,6 @@ func CreateSearchWords() []string {
 		// fmt.Printf("word: %s \n", record[0])
 		sW = append(sW, record[0])
 	}
-	//  =======  print out searchwords to confirm its inflated
-
-	// for i := 0; i < len(sW); i++ {
-	// 	fmt.Println(sW[i])
-	// }
 	return sW
 }
 
