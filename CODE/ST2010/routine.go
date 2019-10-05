@@ -6,154 +6,91 @@ import (
 	"io/ioutil"
 	"os"
 	"sort"
-	"strconv"
 	"strings"
 )
 
-//==============================================
-func readpage(fn string) {
+func step03ListWords() []string {
+	// x := []string{}
+	var tpageswords01 []string
+	var tpageswords02 []string
 
+	for i := 0; i < len(jsonPages01); i++ {
+		fn := jsonPages01[i]
+		// fmt.Println("=======================================\n")
+		fmt.Printf("===i = %d  -  fn = %s\n", i, fn)
+
+		tpageswords01 = readpage(fn)
+		fmt.Println("======    returning from readpage  ========")
+		// append words to master list
+		fmt.Println(tpageswords01)
+		for ii := 0; ii < len(tpageswords01); ii++ {
+			fmt.Println(ii)
+			tpageswords02 = append(tpageswords02, tpageswords01[ii])
+		}
+		sort.Strings(tpageswords02)
+		tpageswords02 = removeDuplicatesUnordered(tpageswords02)
+
+	}
+	return tpageswords02
+}
+
+//==============================================
+func readpage(fn string) []string {
+	var page PageJSON
 	const json02Path = "../../jsonout2/"
-	//const outjpgPath = "../../OUTc/jpg"
-	fmt.Println("================================")
-	fmt.Println("=====  " + fn + "    =====")
+	var tempWD01 []string
+	var tempWD02 []string
 
 	fn = json02Path + fn
-
-	// Open our jsonFile
 	jsonFile, err := os.Open(fn)
-	// if we os.Open returns an error then handle it
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println("Successfully Opened users.json")
-	// defer the closing of our jsonFile so that we can parse it later on
 	defer jsonFile.Close()
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
-
-	// we initialize our Users array
-	// var users Users
-	var page PageJSON
-
 	json.Unmarshal(byteValue, &page)
 
-	// sortedstrings := []string{}
 	for i := 0; i < len(page.PARAGRAPHS[0].WORDS); i++ {
-
+		//  Remove the Header and Footer words.
+		// 	set all words to lower case
 		bbddy := page.PARAGRAPHS[0].WORDS[i].BB.DDY
 		bbaay := page.PARAGRAPHS[0].WORDS[i].BB.AAY
 		if bbaay < 1990 && bbddy > 140 {
-			// remove the header words from the screen
 			wd := page.PARAGRAPHS[0].WORDS[i].TEXT
-			// strings.ToLower(string(wd))
-			strings.ToLower(wd)
 			wd = strings.ToLower(string(wd))
-
-			fmt.Println(strconv.Itoa(i) + " - word: " + wd)
-			// sortedstrings = insert(sortedstrings, wd)
+			tempWD01 = append(tempWD01, wd) // unsorted list
 		}
 	}
+	sort.Strings(tempWD01)
 
-	// fmt.Println(sortedstrings)
-	fmt.Println("===========================================")
-	//  convert this to a map with string count
-
-	// for i := 0; i < len(sortedstrings); i++ {
-	// 	w[sortedstrings[i]]++
-	// 	fmt.Println(strconv.Itoa(i) + "  " + sortedstrings[i] + "  -  " + strconv.Itoa(w[sortedstrings[i]]))
-	// }
-	fmt.Println("===========================================")
-	for key, value := range w {
-		fmt.Println("Key:", key, "Value:", value)
+	tempWD02 = removeDuplicatesUnordered(tempWD01)
+	sort.Strings(tempWD02)
+	for i := 0; i < len(tempWD02); i++ {
+		fmt.Printf("---  i = %d  temp02 = %s \n", i, tempWD02[i])
 	}
 
+	fmt.Println(" ---------  exiting readpage  ------")
+	return tempWD02
 }
 
-//=============================================================
-//=============================================================
-//=============================================================
-// func doreadpages() string {
-func doreadpages() []string {
+//=========
+func removeDuplicatesUnordered(elements []string) []string {
+	encountered := map[string]bool{}
 
-	//  create an array of files to scan
-	pp := [...]string{
-		"mr0001.json",
-		"mr0002.json",
-		"mr0003.json",
-		"mr0004.json",
-		"mr0005.json",
-		"mr0006.json",
-		"mr0007.json",
-		"mr0008.json",
-		"mr0009.json",
-		"mr0010.json",
-		"mr0011.json",
-		"mr0012.json",
-		"mr0013.json",
-		"mr0014.json",
-		"mr0015.json",
-		"mr0016.json",
-		"mr0017.json",
-		"mr0018.json",
-		"mr0019.json",
-		"mr0020.json",
-		"mr0021.json",
-		"mr0022.json",
-		"mr0023.json",
-		"mr0024.json",
-		"mr0025.json",
-		"mr0026.json",
-		"mr0027.json",
-		"mr0028.json",
-		"mr0029.json",
-		"mr0030.json",
-		"mr0031.json",
-		"mr0032.json",
-		"mr0033.json",
-		"mr0034.json",
-		"mr0035.json",
-		"mr0036.json",
-		"mr0037.json",
-		"mr0038.json",
-		"mr0039.json",
-		"mr0040.json",
-		"mr0050.json",
-		"mr0060.json",
-		"mr0070.json",
-		"mr0080.json",
-		"mr0090.json",
-		"mr0100.json",
-		"mr0110.json",
-		"mr0120.json",
-		"mr0130.json",
-		"mr0140.json",
-		"mr0150.json",
-		"mr0160.json",
-		"mr0170.json",
-		"mr0171.json",
-		"mr0172.json",
-		"mr0173.json",
-		"mr0174.json",
-		"mr0175.json",
-		"mr0176.json",
-		// "mr0177.json",
-		"mr0178.json",
-		"mr0179.json",
-		"mr0180.json",
-		"mr0181.json",
-		"mr0182.json",
-		"mr0183.json",
+	// Create a map of all unique elements.
+	for v := range elements {
+		encountered[elements[v]] = true
 	}
 
-	// for i := 0; i < len(pp); i++ {
-	// 	fmt.Println(strconv.Itoa(i) + " ---- " + pp[i])
-	// 	readpage(pp[i])
-	// }
-
-	end := len(pp) - 1
-	return pp[:end]
+	result := []string{}
+	for key, _ := range encountered {
+		result = append(result, key)
+	}
+	return result
 }
+
+//==================================================
 
 //==============================================
 func lookupword1(s string) bool {

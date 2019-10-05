@@ -4,8 +4,6 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
-	"io"
-	"log"
 	"os"
 	"sort"
 	"strconv"
@@ -14,6 +12,8 @@ import (
 var w map[string]int
 var searchWords []string
 var jsonPages01 []string
+var step03Words []string
+var step04Words []string
 
 func main() {
 	const json02Path = "../../jsonout2/"
@@ -23,94 +23,53 @@ func main() {
 	fmt.Println("==  beginning index of json=====")
 
 	w = make(map[string]int)
-	searchWords := createSearchWords01()
 
+	//==========================================================
+	//  step 1 - populate search words
+	//  all of the words that should be tagged for searching.
+	//  This model can be used to create several index strategies.
+	searchWords := createSearchWords01()
 	//  This is to confirm SearchWords has been populated properly
 	for i := 0; i < len(searchWords); i++ {
 		fmt.Println(searchWords[i])
 	}
-
-	// os.Exit(3)
+	// os.Exit(3)  // Exit here for testing
 	//========================================
 
+	//==========================================================
+	// step 02 - create slice of pages to be digested.
+	// not important what page they are listed.
 	jsonPages01 = doreadpages()
-
 	for i := 0; i < len(jsonPages01); i++ {
 		fmt.Println("----- jsonPages01   ---" + jsonPages01[i])
 	}
-	//===========================================
-	// at this point...
-	//	SearchWords are populated
-	//  JsonPages to mine have been populated.
+	//Expected result.  Slice of strings with filenames to be inspected.
+	//os.Exit(3) // Exit here for testing
+	//========================================
 
-	// fn := json02Path + "mr0176.json"
-	// fmt.Println(fn)
-
-	// readpage(json02Path + "mr0175.json")
-	// readpage(json02Path + "mr0176.json")
-	// // readpage(json02Path + "mr0177.json")
-	// fmt.Println("========   mr0178.json===========")
-	// readpage(json02Path + "mr0178.json")
-	// fmt.Println("========   mr0178.json===========")
-	// fmt.Println("========   mr0179.json===========")
-	// readpage(json02Path + "mr0179.json")
-	// fmt.Println("===========  mr0179.json  ==========")
-
-	// readpage(json02Path + "mr0180.json")
-	// fmt.Println("===========  mr0179.json  ==========")
-
-	// // Open our jsonFile
-	// jsonFile, err := os.Open(fn)
-	// // if we os.Open returns an error then handle it
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// fmt.Println("Successfully Opened users.json")
-	// // defer the closing of our jsonFile so that we can parse it later on
-	// defer jsonFile.Close()
-
-	// byteValue, _ := ioutil.ReadAll(jsonFile)
-
-	// // we initialize our Users array
-	// // var users Users
-	// var page PageJSON
-
-	// json.Unmarshal(byteValue, &page)
-
-	// sortedstrings := []string{}
-	// for i := 0; i < len(page.PARAGRAPHS[0].WORDS); i++ {
-
-	// 	bbddy := page.PARAGRAPHS[0].WORDS[i].BB.DDY
-	// 	if bbddy > 140 {
-	// 		// remove the header words from the screen
-	// 		wd := page.PARAGRAPHS[0].WORDS[i].TEXT
-	// 		fmt.Println(strconv.Itoa(i) + " - word: " + wd)
-	// 		sortedstrings = insert(sortedstrings, wd)
-	// 	}
-	// }
-
-	// fmt.Println(sortedstrings)
-	// fmt.Println("===========================================")
-	// //  convert this to a map with string count
-	// w = make(map[string]int)
-
-	// for i := 0; i < len(sortedstrings); i++ {
-	// 	w[sortedstrings[i]]++
-	// 	fmt.Println(strconv.Itoa(i) + "  " + sortedstrings[i] + "  -  " + strconv.Itoa(w[sortedstrings[i]]))
-	// }
-	// fmt.Println("===========================================")
-	// for key, value := range w {
-	// 	fmt.Println("Key:", key, "Value:", value)
-	// }
-
-	fmt.Println("======================================")
-	fmt.Println("======================================")
-	fmt.Println("  w len = " + strconv.Itoa(len(w)))
-	fmt.Println("======================================")
-	fmt.Println("======================================")
-	for key, value := range w {
-		fmt.Println("Key:", key, "Value:", value)
+	//==========================================================
+	// step 03 - create slice of pages to be digested.
+	// not important what page they are listed.
+	step03Words = step03ListWords()
+	for i := 0; i < len(step03Words); i++ {
+		fmt.Printf("--- step03Words - %d - %s \n", i, step03Words[i])
 	}
+	//Expected result.  Slice of strings with filenames to be inspected.
+	// os.Exit(3) // Exit here for testing
+	//========================================
+
+	//==========================================================
+	// step 04 - Sort then remove duplicates
+	step04Words = removeDuplicatesUnordered(step03Words)
+	sort.Strings(step04Words)
+	for i := 0; i < len(step04Words); i++ {
+		fmt.Printf("--- step04 - %d - %s \n", i, step04Words[i])
+	}
+	os.Exit(3) // Exit here for testing
+
+	//==========================================================
+	// step 05 - Dump list to csv file
+	//  this file can be edited to include only tracked words.
 
 	fmt.Println("======================================")
 	fmt.Println("=====  Sorted          ===============")
@@ -188,38 +147,4 @@ func main() {
 		checkError("Cannot write to file", err)
 	}
 
-}
-
-//==================================================
-//==================================================
-func createSearchWords01() []string {
-	var sW []string
-	// Open the file
-	csvfile, err := os.Open("./result2.csv")
-	if err != nil {
-		log.Fatalln("Couldn't open the csv file", err)
-	}
-
-	r := csv.NewReader(csvfile)
-	//r := csv.NewReader(bufio.NewReader(csvfile))
-
-	for {
-		record, err := r.Read()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			log.Fatal(err)
-		}
-		// fmt.Printf("word: %s \n", record[0])
-		sW = append(sW, record[0])
-	}
-	return sW
-}
-
-//==================================================
-func checkError(message string, err error) {
-	if err != nil {
-		log.Fatal(message, err)
-	}
 }
