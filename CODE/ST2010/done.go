@@ -104,6 +104,26 @@ func removeDuplicatesUnordered(elements []string) []string {
 //=============================================================
 //=============================================================
 //---  Step 05
+//=========================================
+// This does a word dump to csv
+// which can be edited.
+// Just keep the words that you want to track
+
+func step05CreateBigWordList(w []string) {
+	file, err := os.Create("./big_result.csv")
+	checkError("Cannot create file", err)
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	for _, value := range step04Words {
+		v := []string{value}
+		err := writer.Write(v)
+		checkError("Cannot write to file", err)
+	}
+	//os.Exit(3) // Exit here for testing
+}
 
 func checkError(message string, err error) {
 	if err != nil {
