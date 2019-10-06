@@ -8,7 +8,7 @@ import (
 	"sort"
 )
 
-var w map[string]int
+//var w map[string]int
 var searchWords []string
 var jsonPages01 []string
 var step03Words []string
@@ -22,18 +22,19 @@ func main() {
 	fmt.Println("================================")
 	fmt.Println("==  beginning index of json=====")
 
-	w = make(map[string]int)
+	//w = make(map[string]int)
 
 	//==========================================================
 	//  step 1 - populate search words
 	//  all of the words that should be tagged for searching.
 	//  This model can be used to create several index strategies.
-	searchWords := createSearchWords01()
-	//  This is to confirm SearchWords has been populated properly
-	for i := 0; i < len(searchWords); i++ {
-		fmt.Println(searchWords[i])
-	}
-	//os.Exit(3) // Exit here for testing
+
+	// searchWords := createSearchWords01()
+	// //  This is to confirm SearchWords has been populated properly
+	// for i := 0; i < len(searchWords); i++ {
+	// 	fmt.Printf("searchWords -- %d -- %s\n", i, searchWords[i])
+	// }
+	// os.Exit(3) // Exit here for testing
 	//========================================
 
 	//==========================================================
