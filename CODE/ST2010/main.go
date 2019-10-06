@@ -118,7 +118,13 @@ func main() {
 	// refactor.. SearchWords should have been a MAP from start.
 	// wp := make(map[string]struct{}, len(searchWords))
 
+	//  Saaves the file to JSON for inspection.
 	file, _ = json.MarshalIndent(step6WordsToTrack, "", " ")
 	_ = ioutil.WriteFile("Step07A.json", file, 0644)
+
+	//==========================================================
+	// step 10 - NewIndex File
+	//  and create map struct of just the words with counts
+	//step7TagFilesToTrack()
 
 }
