@@ -1,7 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"os"
 	"sort"
 )
 
@@ -10,6 +13,7 @@ var searchWords []string
 var jsonPages01 []string
 var step03Words []string
 var step04Words []string
+var step6WordsToTrack []word
 
 func main() {
 	const json02Path = "../../jsonout2/"
@@ -29,7 +33,7 @@ func main() {
 	for i := 0; i < len(searchWords); i++ {
 		fmt.Println(searchWords[i])
 	}
-	// os.Exit(3)  // Exit here for testing
+	//os.Exit(3) // Exit here for testing
 	//========================================
 
 	//==========================================================
@@ -69,5 +73,51 @@ func main() {
 	step05CreateBigWordList(step04Words)
 
 	//os.Exit(3) // Exit here for testing
+
+	//==========================================================
+	// step 06 - Read SearchFilecsv
+	//  and create map struct of just the words with counts
+	step6WordsToTrack = step06BuildBigStruct()
+	fmt.Println(len(step6WordsToTrack))
+	fmt.Println(step6WordsToTrack)
+	//os.Exit(3) // Exit here for testing
+
+	//save to json file for inspection
+	//  Experimenting with ways to save to json file.
+
+	//==========
+	file, _ := json.MarshalIndent(step6WordsToTrack, "", " ")
+	_ = ioutil.WriteFile("Step06A.json", file, 0644)
+	//==========
+	fileWriter, _ := os.Create("Step06B.json")
+	json.NewEncoder(fileWriter).Encode(step6WordsToTrack)
+	//==========
+	// buff := new(bytes.Buffer)
+	// encoder := json.NewEncoder(buff)
+	// encoder.Encode(step6WordsToTrack)
+
+	// file, err := os.Create("./Step06C.json")
+	// checkError(" error in Step06----", err)
+	// defer file.Close()
+
+	// io.Copy(file, buff)
+
+	//============
+	// pagesJson, err := json.Marshal(step6WordsToTrack)
+	// if err != nil {
+	// 	log.Fatal("Cannot encode to JSON ", err)
+	// }
+	//fmt.Fprintf(os.Stdout, "%s", pagesJson)
+
+	//==========================================================
+	// step 07 - Tag files to track
+	//  and create map struct of just the words with counts
+	step7TagFilesToTrack()
+	// create mape of Search Strings
+	// refactor.. SearchWords should have been a MAP from start.
+	// wp := make(map[string]struct{}, len(searchWords))
+
+	file, _ = json.MarshalIndent(step6WordsToTrack, "", " ")
+	_ = ioutil.WriteFile("Step07A.json", file, 0644)
 
 }

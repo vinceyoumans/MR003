@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
@@ -134,6 +135,34 @@ func checkError(message string, err error) {
 //=============================================================
 //=============================================================
 //=============================================================
+//---  Step 06
+//=========================================
+func step06BuildBigStruct() []word {
+	// read the CSV of all words
+	var data word
+	var datas []word
+	csvFile, _ := os.Open("./big_result.csv")
+	reader := csv.NewReader(bufio.NewReader(csvFile))
+	for {
+		line, error := reader.Read()
+		if error == io.EOF {
+			break
+		} else if error != nil {
+			log.Fatal(error)
+		}
+
+		data.Word = line[0]
+		data.Track1 = true //tracking every word
+		data.Track2 = false
+		data.Count = 0
+		datas = append(datas, data)
+	}
+	return datas
+}
+
+//=============================================================
+//=============================================================
+//=============================================================
 // func doreadpages() string {
 func doreadpages() []string {
 
@@ -216,12 +245,16 @@ func doreadpages() []string {
 	return pp[:end]
 }
 
-//==================================================
-//==================================================
+//=============================================================
+//=============================================================
+//=============================================================
+//---  Step 01
+//  these are the words to be tracked.
+//============================================================
 func createSearchWords01() []string {
 	var sW []string
 	// Open the file
-	csvfile, err := os.Open("./result2.csv")
+	csvfile, err := os.Open("./WSearch001.csv")
 	if err != nil {
 		log.Fatalln("Couldn't open the csv file", err)
 	}

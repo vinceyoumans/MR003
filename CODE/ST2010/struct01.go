@@ -7,8 +7,8 @@ type index001 struct {
 type word struct {
 	Track1 bool   `json:"track1"`
 	Track2 bool   `json:"track2"`
-	Word  string `json:"word"`
-	Count int    `json:"count"`
+	Word   string `json:"word"`
+	Count  int    `json:"count"`
 }
 
 //============================================================
