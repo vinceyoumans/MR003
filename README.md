@@ -4,6 +4,7 @@ Digested files.
 
 This is the secondary system to digest and present the MR.
 
+## Project Objective
 This project includes the following:
 Web portal with full text of MR.  Features"
 1. Heat map of specific words with clickable blocks to drill down to individual pages.  For example, if you wanted to "light up" all of the pages with the word "election", then visitor just needs to select that word and a map will appear.  Click the hotsopt to dril down to specific pages.
