@@ -15,6 +15,9 @@ var step03Words []string
 var step04Words []string
 var step6WordsToTrack []word
 
+// var pages01 MRPages
+var Step10_MRPages []MRPage
+
 func main() {
 	const json02Path = "../../jsonout2/"
 	//const outjpgPath = "../../OUTc/jpg"
@@ -126,5 +129,9 @@ func main() {
 	// step 10 - NewIndex File
 	//  and create map struct of just the words with counts
 	//step7TagFilesToTrack()
+	Step10_MRPages = Step10_GenBigScreen01()
+
+	file, _ = json.MarshalIndent(Step10_MRPages, "", " ")
+	_ = ioutil.WriteFile("Step10_MRPages.json", file, 0644)
 
 }

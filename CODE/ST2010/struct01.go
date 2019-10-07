@@ -49,3 +49,16 @@ type PageJSON struct {
 	} `json:"PARAGRAPHS"`
 	WC interface{} `json:"WC"`
 }
+
+type UUID [16]byte
+
+type MRPages struct {
+	MRPage []MRPage `json:"mrpage"` // slice of MRPage
+}
+type MRPage struct {
+	Index    int    `json:"index"`     // 1 to x page number incremented
+	PNum     int    `json:"pnum"`      // integer file name
+	PageNum  string `json:"page_num"`  // pdf labeled page number
+	FileName string `json:"file_name"` // file name of pdf
+	Text     string `json:"text"`      // the raw text of the page
+}
